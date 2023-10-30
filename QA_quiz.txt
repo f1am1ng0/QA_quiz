@@ -62,3 +62,6 @@ public class TestForm {
         driver.quit();
     }
 }
+
+
+Note: Ensure you have the Selenium WebDriver and the ChromeDriver in your classpath. Update the placeholders (path_to_chromedriver.exe and full_path_to_form.html) with actual values as required.
