@@ -1,0 +1,64 @@
+import org.openqa.selenium.*;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import org.openqa.selenium.interactions.Actions;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+public class TestForm {
+    public static void main(String[] args) {
+        
+        // 1) Create a chrome driver instance
+        System.setProperty("webdriver.chrome.driver", "path_to_chromedriver.exe"); // Replace with your driver's path
+        WebDriver driver = new ChromeDriver();
+
+        // 2) Maximize the window to cover the entire screen
+        driver.manage().window().maximize();
+
+        // 3) Open the test form
+        driver.get("full_path_to_form.html"); // Replace with your form's full path
+
+        // 4) Fill in the mail field
+        WebElement email = driver.findElement(By.id("m_email"));
+        email.sendKeys("test@email.com");
+
+        // 5) Fill in the password field
+        WebElement password = driver.findElement(By.cssSelector("input#m_password"));
+        password.sendKeys("password123");
+
+        // 6) Open the dropdown menu & 7) Select the option
+        Select genderDropdown = new Select(driver.findElement(By.id("m_gender")));
+        genderDropdown.selectByVisibleText("Male"); // or another option
+
+        // 8) Mark all items in the Dog breed list
+        List<WebElement> dogBreeds = driver.findElements(By.cssSelector(".m_list-group-item"));
+        for (WebElement breed : dogBreeds) {
+            breed.click();
+        }
+
+        // 9) Drag the slider as far to the right as possible
+        WebElement sliderHandle = driver.findElement(By.id("m_slide-me"));
+        Actions move = new Actions(driver);
+        move.dragAndDropBy(sliderHandle, 100, 0).build().perform(); // assuming 100 moves it to the rightmost
+
+        // 10) Mark Check
+        WebElement checkBox = driver.findElement(By.id("m_terms"));
+        checkBox.click();
+
+        // 11) Wait for the text to be displayed
+        WebDriverWait wait = new WebDriverWait(driver, 3); // wait for up to 3 seconds
+        WebElement successMessage = wait.until(driver -> driver.findElement(By.id("m_successMessage")));
+
+        // 12) Output the displayed text to the console
+        System.out.println(successMessage.getText());
+
+        // 13) Click the submit button
+        WebElement submitButton = driver.findElement(By.cssSelector("button.m_btn.m_btn-primary"));
+        submitButton.click();
+
+        // Optionally, close the driver after a delay
+        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+        driver.quit();
+    }
+}
